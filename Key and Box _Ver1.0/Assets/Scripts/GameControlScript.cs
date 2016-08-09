@@ -10,7 +10,7 @@ public class GameControlScript : Photon.MonoBehaviour {
 
 	public Text m_uiTxtTurnNotification;
 
-	private int[] turnLotation = {1,2};
+	private int[] turnLotation = {1,2,3,4};
 	bool clockwise = true;
 	public int currentTurn = 1;
 
@@ -40,22 +40,34 @@ public class GameControlScript : Photon.MonoBehaviour {
 		var height = sr.bounds.size.y;
 
 		if (PhotonNetwork.player.ID == 1) {
-			firstPosition = new Vector3 (-5, -3.5f, 0);
+			firstPosition = new Vector3 (-2, -4, 0);
 		} else if (PhotonNetwork.player.ID == 2) {
-			firstPosition = new Vector3 (-3, 3.5f, 0);
+			firstPosition = new Vector3 (-2, 4, 0);
+		} else if (PhotonNetwork.player.ID == 3) {
+			firstPosition = new Vector3 (5, -2, 0);
+		} else if (PhotonNetwork.player.ID == 4){
+			firstPosition = new Vector3 (-5, -2, 0);
 		}
 			
 		for (i = 4; i >= 0; i--) {			
 
-			position.x =  firstPosition.x + i * width+ i * 0.1f;
-			position.y = firstPosition.y;
 			Quaternion q = new Quaternion();
-			q= Quaternion.identity;
+			if ((PhotonNetwork.player.ID == 1) || (PhotonNetwork.player.ID == 2)) {
+				position.x = firstPosition.x + i * width + i * 0.1f;
+				position.y = firstPosition.y;
+				q= Quaternion.identity;
+			} else {
+				position.x = firstPosition.x;
+				position.y = firstPosition.y + i * width+ i * 0.1f;
+				q = Quaternion.Euler (0, 0, 90);
+			}
+				
 			card = PhotonNetwork.Instantiate ("Card", position,q, 0);
 			//  自分が生成したCardを移動可能にする
 			card.GetComponent<CardScript>().enabled = true;
 			cardList.Add (card);
         }
+			
 
 	}
 		
@@ -86,14 +98,14 @@ public class GameControlScript : Photon.MonoBehaviour {
 				}
 				if (clockwise == true) {
 					currentTurn++;
-					if (currentTurn == 3) {
+					if (currentTurn == 5) {
 						currentTurn = 1;
 					}
 				} else {
 
 					currentTurn--;
 					if (currentTurn == 0) {
-						currentTurn = 2;
+						currentTurn = 4;
 					}
 				}
 				myPV.RPC("sendFinishMessage", PhotonTargets.All, currentTurn);

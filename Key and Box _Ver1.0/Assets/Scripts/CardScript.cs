@@ -32,7 +32,8 @@ public class CardScript : MonoBehaviour
 
 						obj.transform.position = new Vector3 (Camera.main.transform.position.x + count * 0.1f, 
 							Camera.main.transform.position.y + count * 0.1f, 
-							0);							
+							0);	
+					    obj.transform.SetAsLastSibling();
 						count++;
 					    this.flgFinish = true;
 					}

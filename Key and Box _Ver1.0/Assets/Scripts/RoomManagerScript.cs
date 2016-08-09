@@ -16,7 +16,7 @@ public class RoomManagerScript: MonoBehaviour {
 	public Text m_uiTxtStatus;
 	public Button m_uiBtnEnter;
 
-	const int maxMember = 2;
+	const int maxMember = 4;
 
 	public void Awake()
 	{
